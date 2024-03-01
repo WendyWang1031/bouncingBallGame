@@ -28,6 +28,15 @@ class Brick {
     ctx.fillStyle = "lightGreen";
     ctx.fillRect(this.x, this.y, this.width, this.height);
   }
+
+  touchingBall(ballX, ballY) {
+    return (
+      ballX >= this.x - radius &&
+      ballX <= this.x + this.width + radius &&
+      ballY >= this.y - radius &&
+      ballY <= this.y + this.height + radius
+    );
+  }
 }
 
 //製作所有的方塊
@@ -40,6 +49,34 @@ c.addEventListener("mousemove", (e) => {
 });
 
 function drawCircle() {
+  //確認球是否有打到磚塊
+  brickArray.forEach((brick, index) => {
+    if (brick.touchingBall(circle_x, circle_y)) {
+      //改變x,y方向速度，並且將brick從brickArray移除
+      //從下方撞擊
+      if (circle_y >= brick.y + brick.height) {
+        ySpeed *= -1;
+      }
+      //從上方撞擊
+      else if (circle_y <= brick.y) {
+        ySpeed *= -1;
+      }
+      //從左方撞擊
+      else if (circle_x <= brick.x) {
+        xSpeed *= -1;
+      }
+      //從右方撞擊
+      else if (circle_x >= brick.x + brick.width) {
+        xSpeed *= -1;
+      }
+      brickArray.splice(index, 1);
+      if (brickArray.length == 0) {
+        alert("Game Over!!");
+        clearInterval(game);
+      }
+    }
+  });
+
   // 確認球是否打到橘色地板
   if (
     circle_x >= ground_x - radius &&
