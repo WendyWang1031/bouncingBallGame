@@ -11,6 +11,7 @@ let ground_x = 100;
 let ground_y = 500;
 let ground_height = 5;
 let brickArray = [];
+let count = 0;
 
 function getRandomArbitrary(min, max) {
   return min + Math.floor(Math.random() * (max - min));
@@ -23,6 +24,7 @@ class Brick {
     this.width = 50;
     this.height = 50;
     brickArray.push(this);
+    this.visible = true;
   }
   drawBrick() {
     ctx.fillStyle = "lightGreen";
@@ -50,8 +52,10 @@ c.addEventListener("mousemove", (e) => {
 
 function drawCircle() {
   //確認球是否有打到磚塊
-  brickArray.forEach((brick, index) => {
-    if (brick.touchingBall(circle_x, circle_y)) {
+  brickArray.forEach((brick) => {
+    if (brick.visible && brick.touchingBall(circle_x, circle_y)) {
+      count++;
+      brick.visible = false;
       //改變x,y方向速度，並且將brick從brickArray移除
       //從下方撞擊
       if (circle_y >= brick.y + brick.height) {
@@ -69,8 +73,8 @@ function drawCircle() {
       else if (circle_x >= brick.x + brick.width) {
         xSpeed *= -1;
       }
-      brickArray.splice(index, 1);
-      if (brickArray.length == 0) {
+
+      if (count == 10) {
         alert("Game Over!!");
         clearInterval(game);
       }
@@ -121,7 +125,9 @@ function drawCircle() {
 
   //畫出所有的方塊
   brickArray.forEach((brick) => {
-    brick.drawBrick();
+    if (brick.visible) {
+      brick.drawBrick();
+    }
   });
 
   //畫出可控制的地板
