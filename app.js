@@ -27,7 +27,7 @@ class Brick {
     this.visible = true;
   }
   drawBrick() {
-    ctx.fillStyle = "lightGreen";
+    ctx.fillStyle = "grey";
     ctx.fillRect(this.x, this.y, this.width, this.height);
   }
 
@@ -81,7 +81,7 @@ function drawCircle() {
     }
   });
 
-  // 確認球是否打到橘色地板
+  // 確認球是否打到地板
   if (
     circle_x >= ground_x - radius &&
     circle_x <= ground_x + 200 + radius &&
@@ -120,7 +120,7 @@ function drawCircle() {
   circle_y += ySpeed;
 
   //畫出黑色背景
-  ctx.fillStyle = "black";
+  ctx.fillStyle = "wheat";
   ctx.fillRect(0, 0, canvasWidth, canvasHeight);
 
   //畫出所有的方塊
@@ -131,15 +131,15 @@ function drawCircle() {
   });
 
   //畫出可控制的地板
-  ctx.fillStyle = "orange";
-  ctx.fillRect(ground_x, ground_y, 200, ground_height);
+  ctx.fillStyle = "white";
+  ctx.fillRect(ground_x, ground_y, 100, ground_height);
 
   //畫出圓球
   //(x,y,radius,startAngle,endAngle)
   ctx.beginPath();
   ctx.arc(circle_x, circle_y, radius, 0, 2 * Math.PI);
   ctx.stroke();
-  ctx.fillStyle = "yellow";
+  ctx.fillStyle = "lightgrey";
   ctx.fill();
 }
 
