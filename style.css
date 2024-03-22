@@ -5,4 +5,5 @@
 }
 #myCanvas {
   background-color: wheat;
+  border: solid 5px darkgray;
 }
