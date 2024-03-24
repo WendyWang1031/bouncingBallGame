@@ -44,23 +44,31 @@ class Brick {
       ballY <= this.y + this.height + radius
     );
   }
-  // checkBrickOverlapping() {
-  //   for (let i = 0; i < brickArray.length; i++) {
-  //     let nowBrick = brickArray[i];
-  //     //從nowBrick磚塊的上下左右方位去看
-  //     if (this === nowBrick) continue; //跳過自己
-  //     if (
-  //       this.x < nowBrick.x + nowBrick.width && //重疊到右邊
-  //       this.x + this.width > nowBrick.x && //重疊到左邊
-  //       this.y < nowBrick.y + nowBrick.height && //重疊到上面
-  //       this.y + this.height > nowBrick.y //重疊到下面
-  //     ) {
-  //       // 發現重疊
-  //       return true;
-  //     }
-  //   }
-  //   return false;
-  // }
+
+  pickALocation() {
+    let overlapping = false;
+    let newBrick_x;
+    let newBrick_y;
+
+    function checkOverlap(newBrick_x, newBrick_y) {
+      for (let i = 0; i < brickArray.length; i++) {
+        let checkBrick = brickArray[i];
+        //從nowBrick磚塊的上下左右方位去看
+        if (this === checkBrick) continue; //跳過自己
+        if (
+          this.x < checkBrick.x + checkBrick.width && //重疊到右邊
+          this.x + this.width > checkBrick.x && //重疊到左邊
+          this.y < checkBrick.y + checkBrick.height && //重疊到上面
+          this.y + this.height > checkBrick.y //重疊到下面
+        ) {
+          //發現重疊;
+          overlapping = true;
+          return;
+        }
+      }
+      overlapping = false;
+    }
+  }
 }
 
 function buildRandomBrick() {
@@ -77,7 +85,12 @@ function buildRandomBrick() {
     let newBrickY = getRandomArbitrary(0, 550 - 50 * 2);
     newBrickX += 50;
     newBrickY += 50;
-    new Brick(newBrickX, newBrickY);
+    let newBrick = new Brick(newBrickX, newBrickY);
+    do {
+      let newBrickX = getRandomArbitrary(0, 950 - 50 * 2);
+      let newBrickY = getRandomArbitrary(0, 550 - 50 * 2);
+    } while (newBrick.pickALocation());
+    newBrick = new Brick(newBrickX, newBrickY);
   }
 }
 buildRandomBrick();
@@ -120,7 +133,7 @@ function drawCircle() {
 
       if (brickCount == 10) {
         alert("Game Over!!");
-        clearInterval(game);
+        clearInterval(stopIntervalId);
       }
     }
   });
