@@ -8,23 +8,23 @@ const row = canvasHeight / unit;
 const column = canvasWidth / unit;
 
 //初始宣告
-let circle_x = 160;
-let circle_y = 60;
+let circle_x;
+let circle_y;
+let xSpeed;
+let ySpeed;
+let brickArray;
+let brickCount;
+let gameOver;
+let countdownSec;
+let stopIntervalId;
 let radius = 20;
-let xSpeed = 20;
-let ySpeed = 20;
 let ground_x = 100;
 let ground_y = 500;
 let ground_height = 5;
-let brickArray = [];
-let brickCount = 0;
-let gameOver = false;
-let countdownSec = 10;
-let stopIntervalId;
 
 const start = document.querySelector(".start");
 const countdown = document.querySelector(".countdown");
-countdown.textContent = "";
+
 start.addEventListener("click", startGame);
 
 //創建磚塊資料與方法
@@ -90,20 +90,23 @@ function defaultBackground() {
   ctx.fillStyle = "wheat";
   ctx.fillRect(0, 0, canvasWidth, canvasHeight);
 }
+
+//遊戲的初始狀態
 function defaultGameStates() {
   gameOver = false;
-  brickCount = 0;
-  countdownSec = 10;
   circle_x = 160;
   circle_y = 60;
   xSpeed = 20;
   ySpeed = 20;
+  countdownSec = 10;
+  brickCount = 0;
   brickArray = [];
   for (let i = 0; i < 10; i++) {
     new Brick();
   }
 }
 
+//開始遊戲
 function startGame() {
   clearInterval(stopIntervalId);
   defaultGameStates();
@@ -111,12 +114,12 @@ function startGame() {
   startCountdown();
 }
 
-//生成球與磚塊並碰撞
+//生成球與磚塊
 function drawBallAndBrick() {
   start.disabled = true;
 
   function drawCircle() {
-    //確認球是否有碰到磚塊，碰到後消失
+    //確認球是否有碰到磚塊，碰到後磚塊消失、球變速
     brickArray.forEach((brick) => {
       if (brick.visible && brick.touchingBall(circle_x, circle_y, radius)) {
         brickCount++;
@@ -184,7 +187,7 @@ function drawBallAndBrick() {
       }
     });
 
-    //畫出板子
+    //如果遊戲狀態沒改變、畫出板子
     if (!gameOver) {
       ctx.fillStyle = "white";
       ctx.fillRect(ground_x, ground_y, 100, ground_height);
@@ -223,7 +226,8 @@ function checkGameOver() {
   } else {
     alert("挑戰失敗");
   }
-  start.disabled = false;
   gameOver = true;
-  ctx.clearRect(0, 0, canvasWidth, canvasHeight);
+  start.disabled = false;
+  countdown.textContent = "";
+  defaultBackground();
 }
