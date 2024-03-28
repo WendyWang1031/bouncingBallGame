@@ -15,6 +15,7 @@ let ySpeed;
 let brickArray;
 let brickCount;
 let gameOver;
+let overlapping;
 let countdownSec;
 let stopIntervalId;
 let radius = 20;
@@ -45,11 +46,12 @@ class Brick {
   }
 
   pickALocation() {
-    let overlapping = false;
+    overlapping = false;
     do {
       this.x = Math.floor(Math.random() * column) * unit;
       this.y = Math.floor(Math.random() * row) * unit;
       overlapping = this.checkOverlap();
+      console.log(`磚塊的座標: ${this.x}, ${this.y}, 有無重疊: ${overlapping}`);
     } while (overlapping);
     brickArray.push(this);
   }
@@ -63,11 +65,11 @@ class Brick {
         this.y < checkBrick.y + unit && //重疊到上面
         this.y + unit > checkBrick.y //重疊到下面
       ) {
+        console.log(`重疊的磚塊座標: ${checkBrick.x}, ${checkBrick.y}`);
         return true;
       }
-
-      return false;
     }
+    return false;
   }
 
   touchingBall(circle_x, circle_y, radius) {
@@ -101,6 +103,8 @@ function defaultGameStates() {
   countdownSec = 10;
   brickCount = 0;
   brickArray = [];
+  overlapping = false;
+
   for (let i = 0; i < 10; i++) {
     new Brick();
   }
